@@ -20,6 +20,9 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
         UIImage(systemName: "textformat.123")!, UIImage(systemName: "bolt.fill")!, UIImage(systemName: "testtube.2")!
     ]
     
+    let desc : [String] = [
+        "Quick, what's 2+2?", "Test your knowledge of Mavel's heroes!", "Scientific questions!"
+    ]
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
@@ -29,7 +32,7 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
         let cell = tableView.dequeueReusableCell(withIdentifier: "topic", for: indexPath)
         
         cell.textLabel!.text = data[indexPath.row]
-        cell.detailTextLabel!.text = "Test"
+        cell.detailTextLabel!.text = desc[indexPath.row]
         cell.imageView?.image = images[indexPath.row]
         
         return cell
