@@ -10,7 +10,7 @@ import UIKit
 
 class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableViewDelegate {
     weak var vc : UIViewController?
-    
+    weak var table : UITableView?
     let data : [String] = [
     "Math","Marvel Super Heros", "Science"
     ]
@@ -26,7 +26,12 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
         return cell
     }
 
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let alert = UIAlertController(title: "\(data[indexPath.row]) Pressed", message: "You clicked on \(data[indexPath.row])!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        vc!.present(alert, animated: true)
+        self.table!.deselectRow(at: indexPath, animated: true)
+    }
 }
 
 
@@ -47,6 +52,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         tableViewDelegateAndDataSource.vc = self
+        tableViewDelegateAndDataSource.table = quizTable
         quizTable.dataSource = tableViewDelegateAndDataSource
         quizTable.delegate = tableViewDelegateAndDataSource
     }
