@@ -11,9 +11,16 @@ import UIKit
 class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableViewDelegate {
     weak var vc : UIViewController?
     weak var table : UITableView?
+    
     let data : [String] = [
-    "Math","Marvel Super Heros", "Science"
+        "Math", "Marvel Super Heros", "Science"
     ]
+    
+    let images : [UIImage] = [
+        UIImage(systemName: "textformat.123")!, UIImage(systemName: "bolt.fill")!, UIImage(systemName: "testtube.2")!
+    ]
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
@@ -22,6 +29,8 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
         let cell = tableView.dequeueReusableCell(withIdentifier: "topic", for: indexPath)
         
         cell.textLabel!.text = data[indexPath.row]
+        cell.detailTextLabel!.text = "Test"
+        cell.imageView?.image = images[indexPath.row]
         
         return cell
     }
