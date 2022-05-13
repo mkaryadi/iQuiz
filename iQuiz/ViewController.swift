@@ -11,7 +11,8 @@ import UIKit
 class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableViewDelegate {
     weak var vc : UIViewController?
     weak var table : UITableView?
-    
+    fileprivate var questionViewController : QuestionVC!
+     
     let data : [String] = [
         "Math", "Marvel Super Heros", "Science"
     ]
@@ -22,6 +23,10 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
     
     let desc : [String] = [
         "Quick, what's 2+2?", "Test your knowledge of Mavel's heroes!", "Scientific questions!"
+    ]
+    
+    let questions = [
+        ["This is a test question", "Here's another question"], ["This is another test question"], ["This is a third test question"]
     ]
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -39,10 +44,15 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let alert = UIAlertController(title: "\(data[indexPath.row]) Pressed", message: "You clicked on \(data[indexPath.row])!", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        vc!.present(alert, animated: true)
+        questionBuilder(questions[indexPath.row])
+        vc!.show(questionViewController, sender: vc)
         self.table!.deselectRow(at: indexPath, animated: true)
+    }
+    
+    
+    fileprivate func questionBuilder(_ questions: [String]) {
+        questionViewController = (vc!.storyboard?.instantiateViewController(withIdentifier: "Question") as! QuestionVC)
+        questionViewController.questions = questions
     }
 }
 
@@ -50,7 +60,9 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
 
 class ViewController: UIViewController {
     
+    
     var tableViewDelegateAndDataSource = TableViewDelegateAndDataSource()
+    
     
     @IBAction func settingsPressed(_ sender: Any) {
         let alert = UIAlertController(title: "Settings", message: "Settings go here.", preferredStyle: .alert)

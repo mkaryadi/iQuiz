@@ -1,0 +1,71 @@
+//
+//  AnswerVC.swift
+//  iQuiz
+//
+//  Created by Matthew Karyadi on 5/12/22.
+//
+
+import UIKit
+
+class AnswerVC: UIViewController {
+
+    var correct = false
+    var answer = "Test Answer"
+    var questionNumber = 0
+    var questionViewController : QuestionVC! = nil
+    var questions : [String] = []
+    
+    @IBOutlet weak var correctImage: UIImageView!
+    
+    @IBOutlet weak var questionLabel: UILabel!
+    @IBOutlet weak var answerLabel: UILabel!
+    @IBOutlet weak var correctLabel: UILabel!
+    
+    @IBAction func next(_ sender: Any) {
+        print (questionNumber)
+        if questionNumber < questions.count - 1{
+            questionBuilder()
+            present(questionViewController, animated: true)
+        }
+        else {
+            let endViewController = storyboard?.instantiateViewController(withIdentifier: "End") as! EndVC
+            present(endViewController, animated: true)
+        }
+    }
+    
+    @IBAction func back(_ sender: Any) {
+        self.view.window?.rootViewController?.dismiss(animated: true)
+    }
+    fileprivate func questionBuilder() {
+        if questionViewController == nil {
+            questionViewController = (storyboard?.instantiateViewController(withIdentifier: "Question") as! QuestionVC)
+            questionViewController.questions = questions
+            questionViewController.questionNumber = questionNumber + 1
+        }
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+        questionLabel.text = questions[questionNumber]
+        answerLabel.text = answer
+        if !correct {
+            correctImage.image = UIImage(systemName: "xmark")
+        }
+    }
+    
+
+    
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
+
+}
