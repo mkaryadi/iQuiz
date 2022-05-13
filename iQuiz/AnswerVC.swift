@@ -25,7 +25,7 @@ class AnswerVC: UIViewController {
     @IBOutlet weak var correctLabel: UILabel!
     
     @IBAction func next(_ sender: Any) {
-        if questionNumber < questions.count - 1{
+        if questionNumber < questions.count - 1 {
             questionBuilder()
             present(questionViewController, animated: true)
         }
@@ -57,7 +57,7 @@ class AnswerVC: UIViewController {
 
         // Do any additional setup after loading the view.
         questionLabel.text = questions[questionNumber]
-        answerLabel.text = answer
+        answerLabel.text = "Correct answer: " + answer
         if !correct {
             correctImage.image = UIImage(systemName: "xmark")
             correctLabel.text = "Incorrect :("

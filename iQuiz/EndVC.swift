@@ -13,6 +13,9 @@ class EndVC: UIViewController {
     var numQuestions = 0
 
     @IBOutlet weak var numCorrectLabel: UILabel!
+    @IBOutlet weak var descLabel: UILabel!
+    
+    
     @IBAction func back(_ sender: Any) {
         self.view.window?.rootViewController?.dismiss(animated: true)
     }
@@ -21,6 +24,13 @@ class EndVC: UIViewController {
 
         // Do any additional setup after loading the view.
         numCorrectLabel.text = "\(numCorrect) of \(numQuestions) correct!"
+        if numCorrect == numQuestions {
+            descLabel.text = "Perfect!"
+        } else if numCorrect == numQuestions - 1 {
+            descLabel.text = "Almost!"
+        } else {
+            descLabel.text = "Better luck next time!"
+        }
     }
     
 

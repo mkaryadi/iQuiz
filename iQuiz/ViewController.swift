@@ -32,9 +32,11 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
     }
     
     
-    var mathQuestions = QuestionSet(questions: ["Math Question 1", "Math Question 2"], answers: [["Test Answer 1", "Test Answer 2", "Test Answer 3", "Test Answer 4"], ["Test Answer 5", "Test Answer 6", "Test Answer 7", "Test Answer 8"]], index: [0, 1])
+    var mathQuestions = QuestionSet(questions: ["What is 9 + 10?", "How many sides does a nonagon have?"], answers: [["19", "21", "76", "12"], ["16", "9", "654", "An infinite number"]], index: [0, 1])
     
-    var marvelQuestions = QuestionSet(questions: ["Super Hero Question 1", "Super Hero Question 2"], answers: [["This is a distinct answer", "So is this", "Cope", "Seethe"], ["Mald", "gg", "no re", "not even close"]], index: [1, 2])
+    var marvelQuestions = QuestionSet(questions: ["Who is the first Avenger?", "What year is New York attacked in \"The Avengers\"?"], answers: [["Iron Man", "Captain America", "The Hulk", "Thor"], ["2008", "2015", "2012", "5000 BC"]], index: [1, 2])
+    
+    var scienceQuestions = QuestionSet(questions: ["What is the most abundant element?", "What place is Californium named for?", "How many protons does Oxygen have?"], answers: [["Helium", "Oxygen", "Uranium", "Hydrogen"], ["France", "Brazil", "Antartica", "California"], ["7", "8", "56", "3"]], index: [3,3,1])
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
@@ -64,10 +66,14 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
             questionViewController.answers = mathQuestions.answers
             questionViewController.correctIndex = mathQuestions.index
             questionViewController.questions = mathQuestions.questions
-        default:
+        case 1:
             questionViewController.answers = marvelQuestions.answers
             questionViewController.correctIndex = marvelQuestions.index
             questionViewController.questions = marvelQuestions.questions
+        default:
+            questionViewController.answers = scienceQuestions.answers
+            questionViewController.correctIndex = scienceQuestions.index
+            questionViewController.questions = scienceQuestions.questions
         }
 
     }
