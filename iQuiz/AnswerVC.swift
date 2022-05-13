@@ -15,6 +15,8 @@ class AnswerVC: UIViewController {
     var questionViewController : QuestionVC! = nil
     var questions : [String] = []
     var numCorrect = 0
+    var answers : [[String]] = []
+    var indexs : [Int] = []
     
     @IBOutlet weak var correctImage: UIImageView!
     
@@ -23,7 +25,6 @@ class AnswerVC: UIViewController {
     @IBOutlet weak var correctLabel: UILabel!
     
     @IBAction func next(_ sender: Any) {
-        print (questionNumber)
         if questionNumber < questions.count - 1{
             questionBuilder()
             present(questionViewController, animated: true)
@@ -45,6 +46,8 @@ class AnswerVC: UIViewController {
             questionViewController.questions = questions
             questionViewController.questionNumber = questionNumber + 1
             questionViewController.numCorrect = numCorrect
+            questionViewController.answers = answers
+            questionViewController.correctIndex = indexs
         }
     }
     
@@ -57,8 +60,7 @@ class AnswerVC: UIViewController {
         answerLabel.text = answer
         if !correct {
             correctImage.image = UIImage(systemName: "xmark")
-        } else {
-            numCorrect = numCorrect + 1
+            correctLabel.text = "Incorrect :("
         }
     }
     

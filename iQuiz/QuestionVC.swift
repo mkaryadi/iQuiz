@@ -11,8 +11,9 @@ class QuestionVC: UIViewController {
     
     var selected = -1
     var questions : [String] = []
+    var answers : [[String]] = []
+    var correctIndex : [Int] = []
     var questionNumber = 0
-    var correctAnswer = -1
     var numCorrect = 0
     var answerViewController : AnswerVC! = nil
     
@@ -29,17 +30,20 @@ class QuestionVC: UIViewController {
         }
         sender.isSelected = true
         selected = buttons.firstIndex(of: sender)!
-        NSLog("Currently Selected: \(selected)")
         buttons[4].isEnabled = true
     }
     
     
     @IBAction func submit(_ sender: Any) {
-        //TODO: Check if the answer is right
+        if selected == correctIndex[questionNumber] {
+            numCorrect = numCorrect + 1
+        }
         answerBuilder()
         answerViewController.view.frame = view.frame
         present(answerViewController, animated: true)
     }
+    
+
     
     
     fileprivate func answerBuilder() {
@@ -47,14 +51,23 @@ class QuestionVC: UIViewController {
             answerViewController = (storyboard?.instantiateViewController(withIdentifier: "Answer") as! AnswerVC)
             answerViewController.questions = questions
             answerViewController.questionNumber = questionNumber
+            answerViewController.numCorrect = numCorrect
+            answerViewController.answer = answers[questionNumber][correctIndex[questionNumber]]
+            answerViewController.correct = (selected == correctIndex[questionNumber])
+            answerViewController.answers = answers
+            answerViewController.indexs = correctIndex
         }
     }
     
     override func viewDidLoad() {
+
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         selected = -1
         questionLabel.text = questions[questionNumber]
+        for i in 0...3 {
+            buttons[i].setTitle(answers[questionNumber][i], for: .normal)
+        }
     }
     
 
