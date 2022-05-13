@@ -299,6 +299,9 @@
                             <constraint firstItem="fKq-GO-2i0" firstAttribute="trailing" secondItem="R1s-op-PwT" secondAttribute="trailing" constant="25" id="mv5-zt-5LX"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="numCorrectLabel" destination="oTF-Ql-8bn" id="Die-ui-eB1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QnF-mN-Mtx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

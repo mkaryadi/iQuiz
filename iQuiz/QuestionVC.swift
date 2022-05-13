@@ -13,6 +13,7 @@ class QuestionVC: UIViewController {
     var questions : [String] = []
     var questionNumber = 0
     var correctAnswer = -1
+    var numCorrect = 0
     var answerViewController : AnswerVC! = nil
     
     @IBOutlet var buttons: [UIButton]!

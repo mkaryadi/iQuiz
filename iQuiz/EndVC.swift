@@ -8,7 +8,11 @@
 import UIKit
 
 class EndVC: UIViewController {
+    
+    var numCorrect = 0
+    var numQuestions = 0
 
+    @IBOutlet weak var numCorrectLabel: UILabel!
     @IBAction func back(_ sender: Any) {
         self.view.window?.rootViewController?.dismiss(animated: true)
     }
@@ -16,6 +20,7 @@ class EndVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        numCorrectLabel.text = "\(numCorrect) of \(numQuestions) correct!"
     }
     
 

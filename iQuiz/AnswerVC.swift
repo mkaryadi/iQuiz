@@ -14,6 +14,7 @@ class AnswerVC: UIViewController {
     var questionNumber = 0
     var questionViewController : QuestionVC! = nil
     var questions : [String] = []
+    var numCorrect = 0
     
     @IBOutlet weak var correctImage: UIImageView!
     
@@ -29,6 +30,8 @@ class AnswerVC: UIViewController {
         }
         else {
             let endViewController = storyboard?.instantiateViewController(withIdentifier: "End") as! EndVC
+            endViewController.numCorrect = numCorrect
+            endViewController.numQuestions = questions.count
             present(endViewController, animated: true)
         }
     }
@@ -41,6 +44,7 @@ class AnswerVC: UIViewController {
             questionViewController = (storyboard?.instantiateViewController(withIdentifier: "Question") as! QuestionVC)
             questionViewController.questions = questions
             questionViewController.questionNumber = questionNumber + 1
+            questionViewController.numCorrect = numCorrect
         }
     }
     
@@ -53,6 +57,8 @@ class AnswerVC: UIViewController {
         answerLabel.text = answer
         if !correct {
             correctImage.image = UIImage(systemName: "xmark")
+        } else {
+            numCorrect = numCorrect + 1
         }
     }
     
