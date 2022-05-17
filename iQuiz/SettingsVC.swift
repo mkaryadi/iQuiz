@@ -8,10 +8,19 @@
 import UIKit
 
 class SettingsVC: UIViewController {
+    
+    var delegate : SettingsDelegate? = nil
 
+    @IBOutlet weak var urlBox: UITextField!
+    
     @IBAction func backPressed(_ sender: Any) {
         self.dismiss(animated: true)
     }
+    
+    @IBAction func updatePressed(_ sender: Any) {
+        self.delegate?.update(URL(string: urlBox.text!)!)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

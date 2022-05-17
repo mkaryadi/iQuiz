@@ -51,7 +51,7 @@
                                 <items>
                                     <barButtonItem title="Settings" id="LMJ-tU-bye">
                                         <connections>
-                                            <segue destination="idd-EW-ACH" kind="show" id="9U9-Kz-DBY"/>
+                                            <action selector="settingsPressed:" destination="BYZ-38-t0r" id="Cyv-9n-f0e"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -325,9 +325,9 @@
         <!--SettingsVC-->
         <scene sceneID="2u2-Cv-lzZ">
             <objects>
-                <viewController id="idd-EW-ACH" customClass="SettingsVC" customModule="iQuiz" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Settings" id="idd-EW-ACH" customClass="SettingsVC" customModule="iQuiz" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1Xf-J7-Rhe">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quiz URL:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Fo-Zd-Yzh">
@@ -336,7 +336,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="http://tednewardsandbox.site44.com/questions.json" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9OS-Ms-PyG">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://tednewardsandbox.site44.com/questions.json" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9OS-Ms-PyG">
                                 <rect key="frame" x="20" y="145" width="374" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="URL"/>
@@ -345,6 +345,9 @@
                                 <rect key="frame" x="158" y="214" width="98" height="31"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Check Now"/>
+                                <connections>
+                                    <action selector="updatePressed:" destination="idd-EW-ACH" eventType="touchUpInside" id="FAt-qv-IkV"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qR8-eL-dou">
                                 <rect key="frame" x="10" y="64" width="69" height="31"/>
@@ -370,6 +373,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="SFA-tD-cGd"/>
+                    <connections>
+                        <outlet property="urlBox" destination="9OS-Ms-PyG" id="f4f-c1-tw6"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zgF-3L-4w4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -15,7 +15,7 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
 
     func fetchQuizes(_ url: URL) {
         print("Started fetching...")
-        let session = URLSession.shared.dataTask(with: url) { [self]
+        let session = URLSession.shared.dataTask(with: url) {
             data, response, error in
 
             if response != nil {
@@ -23,28 +23,33 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
                     print("Something went wrong!")
                 }
             }
-
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!)
-                if let arr = json as? [[String: Any]] {
-                    for questionSet in arr {
-                        let title = questionSet["title"] as? String
-                        let desc = questionSet["desc"] as? String
-                        let questionsObj = questionSet["questions"] as? [[String: Any]]
-                        var questionArray : [Question] = []
-                        for question in questionsObj! {
-                            let text = question["text"] as! String
-                            let answers = question["answers"] as! [String]
-                            let correct = Int(question["answer"] as! String)! - 1
-                            questionArray.append(Question(question: text, answers: answers, correct: correct))
+            
+            if data != nil {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data!)
+                    if let arr = json as? [[String: Any]] {
+                        for questionSet in arr {
+                            let title = questionSet["title"] as? String
+                            let desc = questionSet["desc"] as? String
+                            let questionsObj = questionSet["questions"] as? [[String: Any]]
+                            var questionArray : [Question] = []
+                            for question in questionsObj! {
+                                let text = question["text"] as! String
+                                let answers = question["answers"] as! [String]
+                                let correct = Int(question["answer"] as! String)! - 1
+                                questionArray.append(Question(question: text, answers: answers, correct: correct))
+                            }
+                            self.questionSets.append(QuizSet(topic: title!, desc: desc!, questions: questionArray))
+                            
                         }
-                        self.questionSets.append(QuizSet(topic: title!, desc: desc!, questions: questionArray))
-                        
                     }
+                    print("Finished fetching successfully!")
                 }
-            }
-            catch {
-                print("Something went wrong with JSON proccessing")
+                catch {
+                    print("Something went wrong with JSON proccessing")
+                }
+            } else {
+                print("Something went wrong with fetching!")
             }
         }
         session.resume()
@@ -104,13 +109,22 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
     }
 }
 
+protocol SettingsDelegate {
+    func update(_ url: URL)
+}
 
+class ViewController: UIViewController, SettingsDelegate {
 
-class ViewController: UIViewController {
     
+
     
     var tableViewDelegateAndDataSource = TableViewDelegateAndDataSource()
     
+    @IBAction func settingsPressed(_ sender: Any) {
+        let settings = storyboard?.instantiateViewController(withIdentifier: "Settings") as! SettingsVC
+        settings.delegate = self
+        present(settings, animated: true)
+    }
     @IBOutlet weak var quizTable: UITableView!
     var url = URL(string: "https://tednewardsandbox.site44.com/questions.json")
     
@@ -124,6 +138,9 @@ class ViewController: UIViewController {
         tableViewDelegateAndDataSource.fetchQuizes(url!)
     }
 
-
+    func update(_ url: URL) {
+        tableViewDelegateAndDataSource.fetchQuizes(url)
+        print("Updated!")
+    }
 }
 
