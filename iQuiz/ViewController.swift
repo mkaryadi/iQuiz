@@ -37,14 +37,14 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
                         for question in questionsObj! {
                             let text = question["text"] as! String
                             let answers = question["answers"] as! [String]
-                            let correct = Int(question["answer"] as! String)!
+                            let correct = Int(question["answer"] as! String)! - 1
                             questionArray.append(Question(question: text, answers: answers, correct: correct))
                         }
                         self.questionSets.append(QuizSet(topic: title!, desc: desc!, questions: questionArray))
                         
                     }
                 }
-                print(self.questionSets[0].topic)
+                print(self.questionSets)
             }
             catch {
                 print("Something went wrong with JSON proccessing")
@@ -66,12 +66,6 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
         "Quick, what's 2+2?", "Test your knowledge of Mavel's heroes!", "Scientific questions!"
     ]
     
-//    var mathQuestions = QuestionSet(questions: ["What is 9 + 10?", "How many sides does a nonagon have?"], answers: [["19", "21", "76", "12"], ["16", "9", "654", "An infinite number"]], index: [0, 1])
-//
-//    var marvelQuestions = QuestionSet(questions: ["Who is the first Avenger?", "What year is New York attacked in \"The Avengers\"?"], answers: [["Iron Man", "Captain America", "The Hulk", "Thor"], ["2008", "2015", "2012", "5000 BC"]], index: [1, 2])
-//
-//    var scienceQuestions = QuestionSet(questions: ["What is the most abundant element?", "What place is Californium named for?", "How many protons does Oxygen have?"], answers: [["Helium", "Oxygen", "Uranium", "Hydrogen"], ["France", "Brazil", "Antartica", "California"], ["7", "8", "56", "3"]], index: [3,3,1])
-    
     var mathQuestions = [
         Question(question: "What is 9 + 10?", answers: ["19", "21", "76", "12"], correct: 0),
         Question(question: "How many sides does a nonagon have?", answers: ["16", "9", "654", "An infinite number"], correct: 1)
@@ -89,15 +83,14 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
     ]
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return questionSets.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "topic", for: indexPath)
         
-        cell.textLabel!.text = data[indexPath.row]
-        cell.detailTextLabel!.text = desc[indexPath.row]
-        cell.imageView?.image = images[indexPath.row]
+        cell.textLabel!.text = questionSets[indexPath.row].topic
+        cell.detailTextLabel!.text = questionSets[indexPath.row].desc
         
         return cell
     }
@@ -110,15 +103,7 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
     
     fileprivate func questionBuilder(_ choice: Int) {
         questionViewController = (vc!.storyboard?.instantiateViewController(withIdentifier: "Question") as! QuestionVC)
-        switch choice {
-        case 0:
-            questionViewController.questionSet = QuizSet(topic: "Math", desc: "2+2?", questions: mathQuestions)
-        case 1:
-            questionViewController.questionSet = QuizSet(topic: "Marvel", desc: "Mavel??", questions: marvelQuestions)
-        default:
-            questionViewController.questionSet = QuizSet(topic: "Science", desc: "Science???", questions: scienceQuestions)
-        }
-
+        questionViewController.questionSet = questionSets[choice]
     }
 }
 
