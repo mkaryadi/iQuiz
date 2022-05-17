@@ -24,8 +24,6 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
                 }
             }
 
-            let httpResponse = response! as! HTTPURLResponse
-
             do {
                 let json = try JSONSerialization.jsonObject(with: data!)
                 if let arr = json as? [[String: Any]] {
@@ -44,7 +42,6 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
                         
                     }
                 }
-                print(self.questionSets)
             }
             catch {
                 print("Something went wrong with JSON proccessing")
