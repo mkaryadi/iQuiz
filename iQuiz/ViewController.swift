@@ -86,13 +86,6 @@ class ViewController: UIViewController {
     
     var tableViewDelegateAndDataSource = TableViewDelegateAndDataSource()
     
-    
-    @IBAction func settingsPressed(_ sender: Any) {
-        let alert = UIAlertController(title: "Settings", message: "Settings go here.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        self.present(alert, animated: true)
-    }
-    
     @IBOutlet weak var quizTable: UITableView!
     
     override func viewDidLoad() {
