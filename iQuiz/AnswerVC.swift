@@ -10,13 +10,10 @@ import UIKit
 class AnswerVC: UIViewController {
 
     var correct = false
-    var answer = "Test Answer"
     var questionNumber = 0
+    var questionSet : QuizSet! = nil
     var questionViewController : QuestionVC! = nil
-    var questions : [String] = []
     var numCorrect = 0
-    var answers : [[String]] = []
-    var indexs : [Int] = []
     
     @IBOutlet weak var correctImage: UIImageView!
     
@@ -25,14 +22,14 @@ class AnswerVC: UIViewController {
     @IBOutlet weak var correctLabel: UILabel!
     
     @IBAction func next(_ sender: Any) {
-        if questionNumber < questions.count - 1 {
+        if questionNumber < questionSet.count - 1 {
             questionBuilder()
             present(questionViewController, animated: true)
         }
         else {
             let endViewController = storyboard?.instantiateViewController(withIdentifier: "End") as! EndVC
             endViewController.numCorrect = numCorrect
-            endViewController.numQuestions = questions.count
+            endViewController.numQuestions = questionSet.count
             present(endViewController, animated: true)
         }
     }
@@ -40,14 +37,13 @@ class AnswerVC: UIViewController {
     @IBAction func back(_ sender: Any) {
         self.view.window?.rootViewController?.dismiss(animated: true)
     }
+    
     fileprivate func questionBuilder() {
         if questionViewController == nil {
             questionViewController = (storyboard?.instantiateViewController(withIdentifier: "Question") as! QuestionVC)
-            questionViewController.questions = questions
+            questionViewController.questionSet = questionSet
             questionViewController.questionNumber = questionNumber + 1
             questionViewController.numCorrect = numCorrect
-            questionViewController.answers = answers
-            questionViewController.correctIndex = indexs
         }
     }
     
@@ -56,8 +52,8 @@ class AnswerVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        questionLabel.text = questions[questionNumber]
-        answerLabel.text = "Correct answer: " + answer
+        questionLabel.text = questionSet.questions[questionNumber].question
+        answerLabel.text = "Correct answer: " + questionSet.questions[questionNumber].correctAnswer
         if !correct {
             correctImage.image = UIImage(systemName: "xmark")
             correctLabel.text = "Incorrect :("

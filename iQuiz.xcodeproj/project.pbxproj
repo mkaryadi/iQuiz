@@ -20,6 +20,7 @@
 		C470CA012829FF8200D899E1 /* iQuizTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C470CA002829FF8200D899E1 /* iQuizTests.swift */; };
 		C470CA0B2829FF8200D899E1 /* iQuizUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C470CA0A2829FF8200D899E1 /* iQuizUITests.swift */; };
 		C470CA0D2829FF8200D899E1 /* iQuizUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C470CA0C2829FF8200D899E1 /* iQuizUITestsLaunchTests.swift */; };
+		C4A72783283414BA00992900 /* QuizSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A72782283414BA00992900 /* QuizSet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		C470CA062829FF8200D899E1 /* iQuizUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iQuizUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C470CA0A2829FF8200D899E1 /* iQuizUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iQuizUITests.swift; sourceTree = "<group>"; };
 		C470CA0C2829FF8200D899E1 /* iQuizUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iQuizUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C4A72782283414BA00992900 /* QuizSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizSet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 				C470C9EF2829FF7E00D899E1 /* Main.storyboard */,
 				C4000FDD28334D5700D89855 /* SettingsVC.swift */,
 				C470C9ED2829FF7E00D899E1 /* ViewController.swift */,
+				C4A72782283414BA00992900 /* QuizSet.swift */,
 				C4661DA8282DA8A6007F113F /* QuestionVC.swift */,
 				C4661DAA282DA8C1007F113F /* AnswerVC.swift */,
 				C4661DAC282DA8D4007F113F /* EndVC.swift */,
@@ -275,6 +278,7 @@
 				C470C9EE2829FF7E00D899E1 /* ViewController.swift in Sources */,
 				C4661DAB282DA8C1007F113F /* AnswerVC.swift in Sources */,
 				C470C9EA2829FF7E00D899E1 /* AppDelegate.swift in Sources */,
+				C4A72783283414BA00992900 /* QuizSet.swift in Sources */,
 				C470C9EC2829FF7E00D899E1 /* SceneDelegate.swift in Sources */,
 				C4000FDE28334D5700D89855 /* SettingsVC.swift in Sources */,
 			);

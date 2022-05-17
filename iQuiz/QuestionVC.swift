@@ -10,9 +10,7 @@ import UIKit
 class QuestionVC: UIViewController {
     
     var selected = -1
-    var questions : [String] = []
-    var answers : [[String]] = []
-    var correctIndex : [Int] = []
+    var questionSet: QuizSet! = nil
     var questionNumber = 0
     var numCorrect = 0
     var answerViewController : AnswerVC! = nil
@@ -35,10 +33,7 @@ class QuestionVC: UIViewController {
     
     
     @IBAction func submit(_ sender: Any) {
-        if selected == correctIndex[questionNumber] {
-            numCorrect = numCorrect + 1
-        }
-        answerBuilder()
+        answerBuilder(selected == questionSet.questions[questionNumber].correct)
         answerViewController.view.frame = view.frame
         present(answerViewController, animated: true)
     }
@@ -46,16 +41,18 @@ class QuestionVC: UIViewController {
 
     
     
-    fileprivate func answerBuilder() {
+    fileprivate func answerBuilder(_ correct: Bool) {
         if answerViewController == nil {
             answerViewController = (storyboard?.instantiateViewController(withIdentifier: "Answer") as! AnswerVC)
-            answerViewController.questions = questions
+            answerViewController.questionSet = questionSet
             answerViewController.questionNumber = questionNumber
-            answerViewController.numCorrect = numCorrect
-            answerViewController.answer = answers[questionNumber][correctIndex[questionNumber]]
-            answerViewController.correct = (selected == correctIndex[questionNumber])
-            answerViewController.answers = answers
-            answerViewController.indexs = correctIndex
+            if correct {
+                answerViewController.numCorrect = numCorrect + 1
+            }
+            else {
+                answerViewController.numCorrect = numCorrect
+            }
+            answerViewController.correct = correct
         }
     }
     
@@ -64,9 +61,9 @@ class QuestionVC: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         selected = -1
-        questionLabel.text = questions[questionNumber]
+        questionLabel.text = questionSet.questions[questionNumber].question
         for i in 0...3 {
-            buttons[i].setTitle(answers[questionNumber][i], for: .normal)
+            buttons[i].setTitle(questionSet.questions[questionNumber].answers[i], for: .normal)
         }
     }
     
