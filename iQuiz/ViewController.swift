@@ -7,12 +7,53 @@
 
 import UIKit
 
-
 class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableViewDelegate {
     weak var vc : UIViewController?
     weak var table : UITableView?
+    var questionSets : [QuizSet] = []
     fileprivate var questionViewController : QuestionVC!
-     
+
+    func fetchQuizes(_ url: URL) {
+        print("Started fetching...")
+        let session = URLSession.shared.dataTask(with: url) { [self]
+            data, response, error in
+
+            if response != nil {
+                if (response as! HTTPURLResponse).statusCode != 200 {
+                    print("Something went wrong!")
+                }
+            }
+
+            let httpResponse = response! as! HTTPURLResponse
+
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!)
+                if let arr = json as? [[String: Any]] {
+                    for questionSet in arr {
+                        let title = questionSet["title"] as? String
+                        let desc = questionSet["desc"] as? String
+                        let questionsObj = questionSet["questions"] as? [[String: Any]]
+                        var questionArray : [Question] = []
+                        for question in questionsObj! {
+                            let text = question["text"] as! String
+                            let answers = question["answers"] as! [String]
+                            let correct = Int(question["answer"] as! String)!
+                            questionArray.append(Question(question: text, answers: answers, correct: correct))
+                        }
+                        self.questionSets.append(QuizSet(topic: title!, desc: desc!, questions: questionArray))
+                        
+                    }
+                }
+                print(self.questionSets[0].topic)
+            }
+            catch {
+                print("Something went wrong with JSON proccessing")
+            }
+        }
+        session.resume()
+    }
+    
+    
     let data : [String] = [
         "Math", "Marvel Super Heros", "Science"
     ]
@@ -67,16 +108,15 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
         self.table!.deselectRow(at: indexPath, animated: true)
     }
     
-    
     fileprivate func questionBuilder(_ choice: Int) {
         questionViewController = (vc!.storyboard?.instantiateViewController(withIdentifier: "Question") as! QuestionVC)
         switch choice {
         case 0:
-            questionViewController.questionSet = QuizSet(topic: "Math", questions: mathQuestions)
+            questionViewController.questionSet = QuizSet(topic: "Math", desc: "2+2?", questions: mathQuestions)
         case 1:
-            questionViewController.questionSet = QuizSet(topic: "Marvel", questions: marvelQuestions)
+            questionViewController.questionSet = QuizSet(topic: "Marvel", desc: "Mavel??", questions: marvelQuestions)
         default:
-            questionViewController.questionSet = QuizSet(topic: "Science", questions: scienceQuestions)
+            questionViewController.questionSet = QuizSet(topic: "Science", desc: "Science???", questions: scienceQuestions)
         }
 
     }
@@ -90,6 +130,7 @@ class ViewController: UIViewController {
     var tableViewDelegateAndDataSource = TableViewDelegateAndDataSource()
     
     @IBOutlet weak var quizTable: UITableView!
+    var url = URL(string: "https://tednewardsandbox.site44.com/questions.json")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,6 +139,7 @@ class ViewController: UIViewController {
         tableViewDelegateAndDataSource.table = quizTable
         quizTable.dataSource = tableViewDelegateAndDataSource
         quizTable.delegate = tableViewDelegateAndDataSource
+        tableViewDelegateAndDataSource.fetchQuizes(url!)
     }
 
 

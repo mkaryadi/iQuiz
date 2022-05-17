@@ -10,13 +10,15 @@ import UIKit
 class QuizSet {
     let topic : String
     let questions : [Question]
+    let desc : String
     var count : Int {
         return questions.count
     }
     
-    init(topic: String, questions: [Question]) {
+    init(topic: String, desc: String, questions: [Question]) {
         self.topic = topic
         self.questions = questions
+        self.desc = desc
     }
 }
 
