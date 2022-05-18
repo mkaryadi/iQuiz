@@ -9,10 +9,11 @@ import UIKit
 
 class SettingsVC: UIViewController {
     
-    var delegate : SettingsDelegate? = nil
-
+    var delegate : ViewController?
+    var url : URL = URL(string: "http://tednewardsandbox.site44.com/questions.json")!
     @IBOutlet weak var urlBox: UITextField!
     
+    @IBOutlet weak var statusLabel: UILabel!
     @IBAction func backPressed(_ sender: Any) {
         self.dismiss(animated: true)
     }
@@ -23,8 +24,9 @@ class SettingsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+        urlBox.text = url.absoluteString
+        statusLabel.text = ""   
     }
     
 

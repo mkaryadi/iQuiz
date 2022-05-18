@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import Foundation
 
 class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableViewDelegate {
-    weak var vc : UIViewController?
+    weak var vc : ViewController?
     weak var table : UITableView?
     var questionSets : [QuizSet] = []
     fileprivate var questionViewController : QuestionVC!
-
+    
     func fetchQuizes(_ url: URL) {
         print("Started fetching...")
         let session = URLSession.shared.dataTask(with: url) {
@@ -26,6 +27,7 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
             
             if data != nil {
                 do {
+                    self.questionSets = []
                     let json = try JSONSerialization.jsonObject(with: data!)
                     if let arr = json as? [[String: Any]] {
                         for questionSet in arr {
@@ -43,13 +45,17 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
                             
                         }
                     }
-                    print("Finished fetching successfully!")
+                    print("Finished fetching, updating table...")
+                    DispatchQueue.main.async {
+                        self.table?.reloadData()
+                        self.vc!.settingsViewController?.statusLabel.text = "Successfully Updated!"
+                    }
                 }
                 catch {
-                    print("Something went wrong with JSON proccessing")
+                    self.vc!.settingsViewController?.statusLabel.text = "Something went wrong with fetching!"
                 }
             } else {
-                print("Something went wrong with fetching!")
+                self.vc!.settingsViewController?.statusLabel.text = "Something went wrong with fetching!"
             }
         }
         session.resume()
@@ -109,24 +115,21 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
     }
 }
 
-protocol SettingsDelegate {
-    func update(_ url: URL)
-}
 
-class ViewController: UIViewController, SettingsDelegate {
-
-    
+class ViewController: UIViewController{
 
     
     var tableViewDelegateAndDataSource = TableViewDelegateAndDataSource()
+    var settingsViewController: SettingsVC?
     
     @IBAction func settingsPressed(_ sender: Any) {
-        let settings = storyboard?.instantiateViewController(withIdentifier: "Settings") as! SettingsVC
-        settings.delegate = self
-        present(settings, animated: true)
+        settingsViewController = (storyboard?.instantiateViewController(withIdentifier: "Settings") as! SettingsVC)
+        settingsViewController!.delegate = self
+        settingsViewController!.url = url
+        present(settingsViewController!, animated: true)
     }
     @IBOutlet weak var quizTable: UITableView!
-    var url = URL(string: "https://tednewardsandbox.site44.com/questions.json")
+    var url = URL(string: "https://tednewardsandbox.site44.com/questions.json")!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,12 +138,12 @@ class ViewController: UIViewController, SettingsDelegate {
         tableViewDelegateAndDataSource.table = quizTable
         quizTable.dataSource = tableViewDelegateAndDataSource
         quizTable.delegate = tableViewDelegateAndDataSource
-        tableViewDelegateAndDataSource.fetchQuizes(url!)
-    }
-
-    func update(_ url: URL) {
         tableViewDelegateAndDataSource.fetchQuizes(url)
-        print("Updated!")
+    }
+    
+    func update(_ url: URL) {
+        self.url = url
+        tableViewDelegateAndDataSource.fetchQuizes(url)
     }
 }
 
