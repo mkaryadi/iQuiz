@@ -68,15 +68,24 @@ class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableV
                         }
                         print("Finished fetching, updating table...")
                         DispatchQueue.main.async {
+                            let fm = FileManager.default
                             self.table?.reloadData()
-                            self.vc!.settingsViewController?.statusLabel.text = "Successfully Updated!"
+                            let nsQuestionSets = self.questionSets as NSArray
+                            let archivePath = fm.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                            let fullPath = archivePath.appendingPathComponent("quizzes.plist")
+                            do {
+                                let data = try NSKeyedArchiver.archivedData(withRootObject: nsQuestionSets, requiringSecureCoding: false)
+                                try data.write(to: fullPath)
+                            } catch {
+                                print("whoops")
+                            }
                         }
                     }
                     catch {
-                        self.vc!.settingsViewController?.statusLabel.text = "Something went wrong with fetching!"
+                        print("Something went wrong with fetching!")
                     }
                 } else {
-                    self.vc!.settingsViewController?.statusLabel.text = "Something went wrong with fetching!"
+                    print("Something went wrong with fetching!")
                 }
             }
             session.resume()
@@ -146,7 +155,6 @@ class ViewController: UIViewController{
 
     
     var tableViewDelegateAndDataSource = TableViewDelegateAndDataSource()
-    var settingsViewController: SettingsVC?
     
     @IBAction func settingsPressed(_ sender: Any) {
         let alert = UIAlertController(title: "Settings", message: "Quiz URL:", preferredStyle: .alert)
@@ -164,19 +172,23 @@ class ViewController: UIViewController{
     }
     @IBOutlet weak var quizTable: UITableView!
     var url = URL(string: "https://tednewardsandbox.site44.com/questions.json")!
-    
+    let fm = FileManager.default
+
     override func viewDidLoad() {
+        let defaultQuestions = [
+            QuizSet(topic: "Math", desc: "What's 2+2?", questions: tableViewDelegateAndDataSource.mathQuestions),
+            QuizSet(topic: "Marvel", desc: "Super Heroes!", questions: tableViewDelegateAndDataSource.mathQuestions),
+            QuizSet(topic: "Science", desc: "Elements and more!", questions: tableViewDelegateAndDataSource.scienceQuestions)]
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         tableViewDelegateAndDataSource.vc = self
         tableViewDelegateAndDataSource.table = quizTable
         quizTable.dataSource = tableViewDelegateAndDataSource
         quizTable.delegate = tableViewDelegateAndDataSource
-        tableViewDelegateAndDataSource.questionSets = [
-            QuizSet(topic: "Math", desc: "What's 2+2?", questions: tableViewDelegateAndDataSource.mathQuestions),
-            QuizSet(topic: "Marvel", desc: "Super Heroes!", questions: tableViewDelegateAndDataSource.mathQuestions),
-            QuizSet(topic: "Science", desc: "Elements and more!", questions: tableViewDelegateAndDataSource.scienceQuestions)
-        ]
+        
+        let docURL = fm.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fullURL = docURL.appendingPathComponent("quizzes.plist")
+        tableViewDelegateAndDataSource.questionSets = (NSKeyedUnarchiver.unarchiveObject(withFile: fullURL.path) as? [QuizSet]) ?? defaultQuestions
         tableViewDelegateAndDataSource.startMonitoring()
     }
     

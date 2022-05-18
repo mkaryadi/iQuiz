@@ -322,80 +322,9 @@
             </objects>
             <point key="canvasLocation" x="3155.072463768116" y="63.616071428571423"/>
         </scene>
-        <!--SettingsVC-->
-        <scene sceneID="2u2-Cv-lzZ">
-            <objects>
-                <viewController storyboardIdentifier="Settings" id="idd-EW-ACH" customClass="SettingsVC" customModule="iQuiz" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="1Xf-J7-Rhe">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quiz URL:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Fo-Zd-Yzh">
-                                <rect key="frame" x="20" y="105" width="107.5" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9OS-Ms-PyG">
-                                <rect key="frame" x="20" y="145" width="374" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" keyboardType="URL"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBA-5E-iHW">
-                                <rect key="frame" x="158" y="214" width="98" height="31"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="tinted" title="Check Now"/>
-                                <connections>
-                                    <action selector="updatePressed:" destination="idd-EW-ACH" eventType="touchUpInside" id="FAt-qv-IkV"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qR8-eL-dou">
-                                <rect key="frame" x="10" y="64" width="69" height="31"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="chevron.backward" catalog="system" title="Back"/>
-                                <connections>
-                                    <action selector="backPressed:" destination="idd-EW-ACH" eventType="touchUpInside" id="bzV-bA-TNf"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G5Z-rk-ttw">
-                                <rect key="frame" x="20" y="275" width="374" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="na6-zZ-waC"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="qR8-eL-dou" firstAttribute="top" secondItem="na6-zZ-waC" secondAttribute="top" constant="20" id="3AQ-xj-7Fn"/>
-                            <constraint firstItem="G5Z-rk-ttw" firstAttribute="leading" secondItem="na6-zZ-waC" secondAttribute="leading" constant="20" id="67R-R8-3a4"/>
-                            <constraint firstItem="6Fo-Zd-Yzh" firstAttribute="leading" secondItem="na6-zZ-waC" secondAttribute="leading" constant="20" id="9t6-XM-Er0"/>
-                            <constraint firstItem="na6-zZ-waC" firstAttribute="trailing" secondItem="9OS-Ms-PyG" secondAttribute="trailing" constant="20" id="Bma-4S-bg1"/>
-                            <constraint firstItem="sBA-5E-iHW" firstAttribute="centerX" secondItem="1Xf-J7-Rhe" secondAttribute="centerX" id="JyZ-Pr-eW3"/>
-                            <constraint firstItem="6Fo-Zd-Yzh" firstAttribute="top" secondItem="qR8-eL-dou" secondAttribute="bottom" constant="10" id="UDg-fq-byn"/>
-                            <constraint firstItem="sBA-5E-iHW" firstAttribute="top" secondItem="9OS-Ms-PyG" secondAttribute="bottom" constant="35" id="WDa-HQ-NWY"/>
-                            <constraint firstItem="G5Z-rk-ttw" firstAttribute="top" secondItem="sBA-5E-iHW" secondAttribute="bottom" constant="30" id="WpR-fM-TOI"/>
-                            <constraint firstItem="9OS-Ms-PyG" firstAttribute="top" secondItem="6Fo-Zd-Yzh" secondAttribute="bottom" constant="10" id="XQ1-WI-tQk"/>
-                            <constraint firstItem="G5Z-rk-ttw" firstAttribute="centerX" secondItem="1Xf-J7-Rhe" secondAttribute="centerX" id="agd-SP-QsP"/>
-                            <constraint firstItem="na6-zZ-waC" firstAttribute="trailing" secondItem="G5Z-rk-ttw" secondAttribute="trailing" constant="20" id="fzE-lO-fFq"/>
-                            <constraint firstItem="qR8-eL-dou" firstAttribute="leading" secondItem="na6-zZ-waC" secondAttribute="leading" constant="10" id="ghB-4H-USj"/>
-                            <constraint firstItem="9OS-Ms-PyG" firstAttribute="leading" secondItem="na6-zZ-waC" secondAttribute="leading" constant="20" id="lrW-9d-VB7"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="SFA-tD-cGd"/>
-                    <connections>
-                        <outlet property="statusLabel" destination="G5Z-rk-ttw" id="ySJ-zz-ypa"/>
-                        <outlet property="urlBox" destination="9OS-Ms-PyG" id="f4f-c1-tw6"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zgF-3L-4w4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1450.7246376811595" y="-607.36607142857144"/>
-        </scene>
     </scenes>
     <resources>
         <image name="checkmark" catalog="system" width="128" height="114"/>
-        <image name="chevron.backward" catalog="system" width="96" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
