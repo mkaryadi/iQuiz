@@ -7,58 +7,84 @@
 
 import UIKit
 import Foundation
+import Network
 
 class TableViewDelegateAndDataSource : NSObject, UITableViewDataSource, UITableViewDelegate {
     weak var vc : ViewController?
     weak var table : UITableView?
     var questionSets : [QuizSet] = []
     fileprivate var questionViewController : QuestionVC!
+    var networkReachable = false
+    private var monitor = NWPathMonitor()
+    private var queue = DispatchQueue.global(qos: .background)
     
-    func fetchQuizes(_ url: URL) {
-        print("Started fetching...")
-        let session = URLSession.shared.dataTask(with: url) {
-            data, response, error in
-
-            if response != nil {
-                if (response as! HTTPURLResponse).statusCode != 200 {
-                    print("Something went wrong!")
-                }
-            }
-            
-            if data != nil {
-                do {
-                    self.questionSets = []
-                    let json = try JSONSerialization.jsonObject(with: data!)
-                    if let arr = json as? [[String: Any]] {
-                        for questionSet in arr {
-                            let title = questionSet["title"] as? String
-                            let desc = questionSet["desc"] as? String
-                            let questionsObj = questionSet["questions"] as? [[String: Any]]
-                            var questionArray : [Question] = []
-                            for question in questionsObj! {
-                                let text = question["text"] as! String
-                                let answers = question["answers"] as! [String]
-                                let correct = Int(question["answer"] as! String)! - 1
-                                questionArray.append(Question(question: text, answers: answers, correct: correct))
-                            }
-                            self.questionSets.append(QuizSet(topic: title!, desc: desc!, questions: questionArray))
-                            
-                        }
-                    }
-                    print("Finished fetching, updating table...")
-                    DispatchQueue.main.async {
-                        self.table?.reloadData()
-                        self.vc!.settingsViewController?.statusLabel.text = "Successfully Updated!"
-                    }
-                }
-                catch {
-                    self.vc!.settingsViewController?.statusLabel.text = "Something went wrong with fetching!"
-                }
+    override init() {
+        monitor = NWPathMonitor()
+        queue = DispatchQueue.global(qos: .background)
+        monitor.start(queue: queue)
+    }
+    
+    func startMonitoring() {
+        monitor.pathUpdateHandler = {path in
+            if path.status == .satisfied {
+                print("We've got a connection!")
             } else {
-                self.vc!.settingsViewController?.statusLabel.text = "Something went wrong with fetching!"
+                print("No internet :(")
             }
         }
-        session.resume()
+    }
+    
+    
+    func fetchQuizes(_ url: URL) {
+        if monitor.currentPath.status == .satisfied {
+            print("Started fetching...")
+            let session = URLSession.shared.dataTask(with: url) {
+                data, response, error in
+                
+                if response != nil {
+                    if (response as! HTTPURLResponse).statusCode != 200 {
+                        print("Something went wrong!")
+                    }
+                }
+                
+                if data != nil {
+                    do {
+                        self.questionSets = []
+                        let json = try JSONSerialization.jsonObject(with: data!)
+                        if let arr = json as? [[String: Any]] {
+                            for questionSet in arr {
+                                let title = questionSet["title"] as? String
+                                let desc = questionSet["desc"] as? String
+                                let questionsObj = questionSet["questions"] as? [[String: Any]]
+                                var questionArray : [Question] = []
+                                for question in questionsObj! {
+                                    let text = question["text"] as! String
+                                    let answers = question["answers"] as! [String]
+                                    let correct = Int(question["answer"] as! String)! - 1
+                                    questionArray.append(Question(question: text, answers: answers, correct: correct))
+                                }
+                                self.questionSets.append(QuizSet(topic: title!, desc: desc!, questions: questionArray))
+                            }
+                        }
+                        print("Finished fetching, updating table...")
+                        DispatchQueue.main.async {
+                            self.table?.reloadData()
+                            self.vc!.settingsViewController?.statusLabel.text = "Successfully Updated!"
+                        }
+                    }
+                    catch {
+                        self.vc!.settingsViewController?.statusLabel.text = "Something went wrong with fetching!"
+                    }
+                } else {
+                    self.vc!.settingsViewController?.statusLabel.text = "Something went wrong with fetching!"
+                }
+            }
+            session.resume()
+        } else {
+            let alert = UIAlertController(title: "No internet access!", message: "The internet cannot be reached.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            vc!.present(alert, animated: true)
+        }
     }
     
     
@@ -123,10 +149,18 @@ class ViewController: UIViewController{
     var settingsViewController: SettingsVC?
     
     @IBAction func settingsPressed(_ sender: Any) {
-        settingsViewController = (storyboard?.instantiateViewController(withIdentifier: "Settings") as! SettingsVC)
-        settingsViewController!.delegate = self
-        settingsViewController!.url = url
-        present(settingsViewController!, animated: true)
+        let alert = UIAlertController(title: "Settings", message: "Quiz URL:", preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.keyboardType = .URL
+            textField.text = self.url.absoluteString
+        }
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+            let link = URL(string: alert.textFields![0].text!)!
+            self.url = link
+            self.update(link)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default))
+        self.present(alert, animated: true)
     }
     @IBOutlet weak var quizTable: UITableView!
     var url = URL(string: "https://tednewardsandbox.site44.com/questions.json")!
@@ -138,6 +172,15 @@ class ViewController: UIViewController{
         tableViewDelegateAndDataSource.table = quizTable
         quizTable.dataSource = tableViewDelegateAndDataSource
         quizTable.delegate = tableViewDelegateAndDataSource
+        tableViewDelegateAndDataSource.questionSets = [
+            QuizSet(topic: "Math", desc: "What's 2+2?", questions: tableViewDelegateAndDataSource.mathQuestions),
+            QuizSet(topic: "Marvel", desc: "Super Heroes!", questions: tableViewDelegateAndDataSource.mathQuestions),
+            QuizSet(topic: "Science", desc: "Elements and more!", questions: tableViewDelegateAndDataSource.scienceQuestions)
+        ]
+        tableViewDelegateAndDataSource.startMonitoring()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         tableViewDelegateAndDataSource.fetchQuizes(url)
     }
     
